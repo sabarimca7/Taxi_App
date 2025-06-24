@@ -1,0 +1,62 @@
+<h2>{{ bookingId ? 'Update Booking' : 'Book a Cab' }}</h2>
+
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+
+  <!-- Cab Selection -->
+  <div class="form-row full-width">
+    <label for="cabId">Cab:</label>
+    <select id="cabId" formControlName="cabId">
+      <option value="">-- Select a Cab --</option>
+       <option value="1">Sedan</option>
+         <option value="2">Xuv</option>
+           <option value="3">HatchBack</option>
+    </select>
+  </div>
+
+  <!-- From and To -->
+  <div class="form-row">
+    <label for="fromLocation">From:</label>
+    <input id="fromLocation" type="text" formControlName="fromLocation" placeholder="Start place" />
+  </div>
+
+  <div class="form-row">
+    <label for="toLocation">To:</label>
+    <input id="toLocation" type="text" formControlName="toLocation" placeholder="Destination" />
+  </div>
+
+  <!-- Pickup and Return -->
+  <div class="form-row">
+    <label for="pickupDateTime">Pickup Time:</label>
+    <input id="pickupDateTime" type="datetime-local" formControlName="pickupDateTime" />
+  </div>
+
+  <div class="form-row">
+    <label for="returnDateTime">Return Time:</label>
+    <input id="returnDateTime" type="datetime-local" formControlName="returnDateTime" />
+  </div>
+
+  <!-- Customer Info -->
+  <div class="form-row">
+    <label for="customerName">Name:</label>
+    <input id="customerName" type="text" formControlName="customerName" placeholder="Your full name" />
+  </div>
+
+  <div class="form-row">
+    <label for="phoneNumber">Phone:</label>
+    <input id="phoneNumber" type="text" formControlName="phoneNumber" placeholder="Mobile number" maxlength="10" />
+  </div>
+
+  <div class="form-row full-width">
+    <label for="address">Address:</label>
+    <textarea id="address" formControlName="address" rows="2" placeholder="Your full address"></textarea>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="form-actions full-width">
+    <button type="submit" [disabled]="bookingForm.invalid">
+      {{ bookingId ? 'Update Booking' : 'Book Cab' }}
+    </button>
+    <button type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>
+

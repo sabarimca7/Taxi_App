@@ -1,0 +1,8 @@
+.navbar-nav .nav-link {
+  font-weight: 500;
+  margin: 0 10px;
+}
+
+form.d-flex input {
+  max-width: 200px;
+}
