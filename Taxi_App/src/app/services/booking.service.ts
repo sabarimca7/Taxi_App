@@ -34,8 +34,7 @@ CreateBooking(booking: any): Observable<any> {
       pickupDateTime: "2025-06-25T10:00:00",
       returnDateTime: "2025-06-25T12:00:00",
       customerName: "Updated Name",
-      phoneNumber: "9876543210",
-      address: "Updated Address"
+      phoneNumber: "9876543210"
     };
 
     this.http.put(`https://localhost:7113/api/Booking`, updatedData)

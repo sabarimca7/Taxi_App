@@ -1,6 +1,7 @@
-<h2>Booking List</h2>
 
-<table border="1" cellpadding="10">
+<div class="contact-page" style="height: 500px;">
+
+<table cellpadding="10" border="1" style="margin: 50px;">
   <thead>
     <tr>
       <th>Customer</th>
@@ -9,6 +10,7 @@
       <th>Pickup</th>
       <th>Return</th>
       <th>Cab ID</th>
+      <th>Contact</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -20,6 +22,7 @@
       <td>{{ booking.pickupDateTime | date:'short' }}</td>
       <td>{{ booking.returnDateTime ? (booking.returnDateTime | date:'short') : '-' }}</td>
       <td>{{ booking.cabId }}</td>
+      <td>{{ booking.phoneNumber }}</td>
       <td>
         <button (click)="editBooking(booking.id)">Edit</button>
         <button (click)="deleteBooking(booking.id)">Delete</button>
@@ -27,3 +30,4 @@
     </tr>
   </tbody>
 </table>
+</div>

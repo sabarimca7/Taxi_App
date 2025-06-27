@@ -1,0 +1,74 @@
+/* Background image */
+.home-background {
+  position: relative;
+  width: 100%;
+  height: 530px; /* Full screen height */
+  background: url('../../assets/image/3644592.jpg') no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Semi-transparent overlay for dark effect */
+.home-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
+  z-index: 1;
+}
+
+/* Content on top of overlay */
+.home-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  max-width: 700px;
+}
+
+.home-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-content p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.home-content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.home-content li {
+  margin: 0.5rem 0;
+}
+
+.get-started-button {
+  background-color: #ffc107;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+
+.get-started-button:hover {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+/* Optional: Taxi image (bottom or floating) */
+.cab-image {
+  margin-top: 30px;
+  width: 200px;
+}

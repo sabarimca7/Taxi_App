@@ -7,9 +7,9 @@
     <label for="cabId">Cab:</label>
     <select id="cabId" formControlName="cabId">
       <option value="">-- Select a Cab --</option>
-       <option value="1">Sedan</option>
-         <option value="2">Xuv</option>
-           <option value="3">HatchBack</option>
+      <option value="1">Sedan</option>
+      <option value="2">XUV</option>
+      <option value="3">HatchBack</option>
     </select>
   </div>
 
@@ -24,15 +24,53 @@
     <input id="toLocation" type="text" formControlName="toLocation" placeholder="Destination" />
   </div>
 
-  <!-- Pickup and Return -->
+  <!-- Pickup Date -->
   <div class="form-row">
-    <label for="pickupDateTime">Pickup Time:</label>
-    <input id="pickupDateTime" type="datetime-local" formControlName="pickupDateTime" />
+    <label for="pickupDate">Pickup Date:</label>
+    <input id="pickupDate" type="date" formControlName="pickupDate" />
   </div>
 
+ <!-- Pickup Time (Custom Dropdown for 12-hour format) -->
+<!-- Pickup Time (12-hour format) -->
+<div class="form-row">
+  <label>Pickup Time:</label>
+  <div class="time-row">
+    
+    <!-- Hours -->
+    <select formControlName="pickupHour">
+      
+      <option   value="">HH</option>
+      <option *ngFor="let hour of hours" [value]="hour">{{ hour }}</option>
+    </select>
+
+    <span>:</span>
+
+    <!-- Minutes -->
+    <select formControlName="pickupMinute">
+      <option   value="">MM</option>
+      <option *ngFor="let minute of minutes" [value]="minute">{{ minute }}</option>
+    </select>
+
+    <!-- AM/PM -->
+    <select formControlName="pickupAmPm">
+      
+      <option   value="AM">AM</option>
+      <option   value="PM">PM</option>
+    </select>
+  </div>
+</div>
+
+
+
+  <!-- Return Date only -->
   <div class="form-row">
-    <label for="returnDateTime">Return Time:</label>
-    <input id="returnDateTime" type="datetime-local" formControlName="returnDateTime" />
+    <label for="returnDate">Return Date:</label>
+    <input id="returnDate" type="date" formControlName="returnDate" />
+  </div>
+
+  <!-- Show Formatted Pickup Time -->
+  <div *ngIf="formattedPickupTime" class="form-row">
+    Selected Pickup Time: {{ formattedPickupTime }}
   </div>
 
   <!-- Customer Info -->
@@ -41,22 +79,24 @@
     <input id="customerName" type="text" formControlName="customerName" placeholder="Your full name" />
   </div>
 
-  <div class="form-row">
+  <div class="form-row full-width">
     <label for="phoneNumber">Phone:</label>
     <input id="phoneNumber" type="text" formControlName="phoneNumber" placeholder="Mobile number" maxlength="10" />
   </div>
 
-  <div class="form-row full-width">
-    <label for="address">Address:</label>
-    <textarea id="address" formControlName="address" rows="2" placeholder="Your full address"></textarea>
-  </div>
-
   <!-- Action Buttons -->
   <div class="form-actions full-width">
-    <button type="submit" [disabled]="bookingForm.invalid">
-      {{ bookingId ? 'Update Booking' : 'Book Cab' }}
-    </button>
-    <button type="button" (click)="onCancel()">Cancel</button>
-  </div>
+   <button 
+    type="submit" 
+    [disabled]="bookingForm.invalid"
+  >
+    {{ bookingId ? 'Update Booking' : 'Book Cab' }}
+  </button>
+  <button type="button" (click)="onCancel()">Cancel</button>
+</div>
+
+
+
 </form>
+
 

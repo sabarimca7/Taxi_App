@@ -14,6 +14,12 @@ export class BookingFormComponent implements OnInit {
   availableCabs: Cab[] = [];
   bookingId: number | null = null;
 
+  
+  public hours: string[] = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+  public minutes: string[] = Array.from({ length: 60 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+
+  
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -23,16 +29,25 @@ export class BookingFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize form
-    this.bookingForm = this.fb.group({
-      cabId: ['', Validators.required],
-      fromLocation: ['', Validators.required],
-      toLocation: ['', Validators.required],
-      pickupDateTime: ['', Validators.required],
-      returnDateTime: [''],
-      customerName: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      address: ['', Validators.required]
+   this.bookingForm = this.fb.group({
+  cabId: ['', Validators.required],
+  fromLocation: ['', Validators.required],
+  toLocation: ['', Validators.required],
+  pickupDate: ['', Validators.required],
+  pickupHour: ['', Validators.required],
+  pickupMinute: ['', Validators.required],
+  pickupAmPm: ['', Validators.required],
+  returnDate: [''],
+  customerName: ['', Validators.required],
+  phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]]
+  
+
+
+      
     });
+
+
+
 
     // Load cab list
     // this.loadAvailableCabs();
@@ -45,6 +60,7 @@ export class BookingFormComponent implements OnInit {
         this.loadBookingData(this.bookingId);
       }
     });
+    
   }
 
   loadAvailableCabs(): void {
@@ -67,37 +83,93 @@ export class BookingFormComponent implements OnInit {
       });
   }
 
-  onSubmit(): void {
-    const data = this.bookingForm.value;
+onSubmit(): void {
+  const formValue = this.bookingForm.value;
+  
+const returnDate = formValue.returnDate ? new Date(formValue.returnDate) : null;
 
-    if (this.bookingId) {
-      // UPDATE
-      this.http.put(`https://localhost:7113/api/Booking/id?id=${this.bookingId}`, data)
-        .subscribe({
-          next: () => {
-            alert('Booking updated successfully!');
-            this.router.navigate(['/booking-list']);
-          },
-          error: err => {
-            console.error('Update error:', err);
-            alert('Update failed');
+
+let hour = parseInt(formValue.pickupHour, 10);
+const minute = parseInt(formValue.pickupMinute, 10);
+const amPm = formValue.pickupAmPm;
+
+if (amPm === 'PM' && hour < 12) hour += 12;
+if (amPm === 'AM' && hour === 12) hour = 0;
+
+const pickupDate = new Date(formValue.pickupDate);
+pickupDate.setHours(hour, minute, 0, 0);
+
+
+  const dataToSend = {
+    cabId: formValue.cabId,
+    fromLocation: formValue.fromLocation,
+    toLocation: formValue.toLocation,
+      pickupDateTime: pickupDate.toISOString(),                         // ✅ Match your model
+  returnDateTime: returnDate ? returnDate.toISOString() : null,     // ✅ Send null if empty
+    customerName: formValue.customerName,
+    phoneNumber: formValue.phoneNumber
+    
+  };
+console.log("Navigating to booking list...");
+this.router.navigate(['/booking-list']);
+  if (this.bookingId) {
+    // UPDATE
+    this.http.put(`https://localhost:7113/api/Booking/id?id=${this.bookingId}`, dataToSend)
+      .subscribe({
+        next: () => {
+          alert('Booking updated successfully!');
+          this.router.navigate(['/booking-list']);
+        },
+        error: err => {
+          console.error('Update error:', err);
+          alert('Update failed');
+        }
+      });
+  } else {
+    // CREATE
+    this.http.post('https://localhost:7113/api/Booking', dataToSend)
+      .subscribe({
+        next: () => {
+          alert('Booking created successfully!');
+          this.router.navigate(['/booking-list']);
+        },
+        error: err => {
+          console.error('Create error:', err);
+          if (err.status === 400 && err.error?.errors) {
+            console.log("Validation errors:", err.error.errors);
           }
-        });
-    } else {
-      // CREATE
-      this.http.post('https://localhost:7113/api/Booking', data)
-        .subscribe({
-          next: () => {
-            alert('Booking created successfully!');
-            this.router.navigate(['/booking-list']);
-          },
-          error: err => {
-            console.error('Create error:', err);
-            alert('Create failed');
-          }
-        });
-    }
+          alert('Create failed');
+        }
+      });
   }
+}
+
+  formattedPickupTime: string | null = null;
+onTimeChange(event: any) {
+    if (this.bookingForm.invalid) return;
+
+    const formValue = this.bookingForm.value;
+
+    // Combine time fields into a single string if needed:
+    const pickupTime = `${formValue.pickupHour}:${formValue.pickupMinute} ${formValue.pickupAmPm}`;
+
+    const bookingData = {
+      ...formValue,
+      pickupTimeFormatted: pickupTime
+    };
+
+    console.log('Submitted Booking:', bookingData);
+
+    // Navigate or submit to backend
+    this.router.navigate(['/booking-list']);
+    
+
+    
+}
+
+
+
+
 
   onCancel(): void {
     this.router.navigate(['/booking-list']);

@@ -7,5 +7,4 @@ export interface Booking {
   returnDateTime?: string;
   customerName: string;
   phoneNumber: string;
-  address: string;
 }
